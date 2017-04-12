@@ -3,28 +3,24 @@
 set -o errexit
 set -o xtrace
 
-
-main () {
+main() {
   init_docker_container
   sleep 2
   assert_can_clone
 }
 
-
-init_docker_container () {
+init_docker_container() {
   docker-compose -f ./example/docker-compose.yml up -d
 }
 
-
-assert_can_clone () {
+assert_can_clone() {
   git clone http://localhost:8082/myrepo.git
   [[ -f "myrepo/myfile.txt" ]] || exit 1
 
   echo "OK!"
 }
 
-
-cleanup () {
+cleanup() {
   local exit_code=$?
 
   echo "Exited with [$exit_code]"
@@ -32,7 +28,5 @@ cleanup () {
   rm -rf myrepo
 }
 
-
 trap cleanup EXIT
-main 
-
+main

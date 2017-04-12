@@ -16,7 +16,6 @@
 set -o errexit
 set -o xtrace
 
-
 readonly GIT_PROJECT_ROOT="/var/lib/git"
 readonly GIT_INITIAL_ROOT="/var/lib/initial"
 readonly GIT_HTTP_EXPORT_ALL=true
@@ -28,29 +27,28 @@ readonly USERID=nginx
 readonly SOCKUSERID=$USERID
 readonly FCGISOCKET=/var/run/fcgiwrap.socket
 
-
-main () {
+main() {
   mkdir -p $GIT_PROJECT_ROOT
 
   while [ $# != "0" ]; do
     case $1 in
-      -start)   initialize_services
-                ;;
-      
-      -init)    clean_git_root
-                initialize_initial_repositories
-                ;;
+      -start) initialize_services ;;
+
+      -init)
+        clean_git_root
+        initialize_initial_repositories
+        ;;
     esac
     shift
   done
 
 }
 
-clean_git_root () {
-  rm -rf $GIT_PROJECT_ROOT/* 
+clean_git_root() {
+  rm -rf $GIT_PROJECT_ROOT/*
 }
 
-initialize_services () {
+initialize_services() {
   chown -R git:git $GIT_PROJECT_ROOT
   chmod -R 775 $GIT_PROJECT_ROOT
 
@@ -58,8 +56,7 @@ initialize_services () {
   exec nginx
 }
 
-
-initialize_initial_repositories () {
+initialize_initial_repositories() {
   cd $GIT_INITIAL_ROOT
   for dir in $(find . -name "*" -type d -maxdepth 1 -mindepth 1); do
     echo "Initializing repository $dir"
@@ -67,10 +64,9 @@ initialize_initial_repositories () {
   done
 }
 
-
-init_and_commit () {
+init_and_commit() {
   local dir=$1
-  local tmp_dir=`mktemp -d`
+  local tmp_dir=$(mktemp -d)
 
   cp -r $dir/* $tmp_dir
   pushd . >/dev/null
@@ -90,6 +86,4 @@ init_and_commit () {
   popd >/dev/null
 }
 
-
 main "$@"
-

@@ -1,5 +1,4 @@
-FROM nginx:1.10.1-alpine
-MAINTAINER Ciro S. Costa <ciro.costa@liferay.com>
+FROM nginx:alpine
 
 RUN set -x && \
   apk --update upgrade                                  &&  \
