@@ -19,7 +19,7 @@ Now, initialize a bare repository:
 
   ```sh
   cd repositories
-  git init --bare repos/myrepo.git
+  git init --bare myrepo.git
   ```
 
 and then, just clone it somewhere else:
