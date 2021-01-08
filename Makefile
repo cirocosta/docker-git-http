@@ -1,11 +1,12 @@
 IMAGE_NAME 	:=	catks/gitserver-http
-SAMPLE_REPO	:=  ./example/repositories/sample-repo
+SAMPLE_REPO	:=  ./examples/repositories/sample-repo
 
 all: image
 
 test:
-	./test.sh
-
+	docker-compose build
+	docker-compose run --rm gitclient sh test.sh
+	docker-compose down
 
 image:
 	docker build -t $(IMAGE_NAME) .
@@ -17,11 +18,11 @@ release:
 
 
 example-no-init:
-	docker-compose -f ./example/docker-compose.no-init.yml up
+	docker-compose -f ./examples/docker-compose.no-init.yml up
 
 
 example:
-	docker-compose -f ./example/docker-compose.yml up
+	docker-compose -f ./examples/docker-compose.yml up
 
 
-.PHONY: image example example-no-init test
+.PHONY: image example example-no-init test release

@@ -1,0 +1,14 @@
+version: '3.2'
+services:
+  gitclient:
+    build:
+      context: 'docker/gitclient'
+    volumes:
+      - .:/gitclient
+    depends_on:
+      - gitserver
+
+  gitserver:
+    image: 'catks/gitserver-http'
+    volumes:
+      - './examples/initial:/var/lib/initial:ro'
