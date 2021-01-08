@@ -26,7 +26,6 @@ readonly SOCKUSERID="$USERID"
 main() {
   mkdir -p $GIT_PROJECT_ROOT
 
-  echo "Args: $@"
 
   # Checks if $GIT_INITIAL_ROOT has files
   if [[ $(ls -A ${GIT_INITIAL_ROOT}) ]]; then
@@ -34,6 +33,7 @@ main() {
   fi
   initialize_services
 
+  echo "Running: $@"
   exec "$@"
 }
 
@@ -43,7 +43,6 @@ initialize_services() {
     chown -R git:git $GIT_PROJECT_ROOT
     chmod -R 775 $GIT_PROJECT_ROOT
   fi
-  echo "Hi from the other side"
 }
 
 initialize_initial_repositories() {
@@ -74,5 +73,4 @@ init_and_commit() {
   popd >/dev/null
 }
 
-echo "Hi in the script"
 main "$@"

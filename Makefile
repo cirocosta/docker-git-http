@@ -1,8 +1,7 @@
-IMAGE_NAME 	:=	cirocosta/gitserver-http
+IMAGE_NAME 	:=	catks/gitserver-http
 SAMPLE_REPO	:=  ./example/repositories/sample-repo
 
 all: image
-
 
 test:
 	./test.sh
@@ -11,17 +10,18 @@ test:
 image:
 	docker build -t $(IMAGE_NAME) .
 
+release:
+	docker tag $(IMAGE_NAME) $(IMAGE_NAME):$(BUILD_VERSION)
 
-example-no-init: 
-	docker-compose \
-		-f ./example/docker-compose.no-init.yml \
-		up
+	docker push $(IMAGE_NAME):$(BUILD_VERSION)
 
 
-example: 
-	docker-compose \
-		-f ./example/docker-compose.yml \
-		up
+example-no-init:
+	docker-compose -f ./example/docker-compose.no-init.yml up
+
+
+example:
+	docker-compose -f ./example/docker-compose.yml up
 
 
 .PHONY: image example example-no-init test

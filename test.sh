@@ -5,7 +5,7 @@ set -o errexit
 
 main() {
   init_docker_container
-  sleep 3
+  sleep 5
   assert_can_clone
   assert_can_push
 }
