@@ -5,13 +5,13 @@
 
 ## Usage
 
-To run a git server without any repositories configured in advance but allowing them to be saved into `./repositories`: 
- 
+To run a git server without any repositories configured in advance but allowing them to be saved into `./repositories`:
+
   ```sh
   docker run \
     -d  \                                 # deamonize
     -v `pwd`/repositories:/var/lib/git \  # mount the volume
-    -p "8080:80" \                        # expose the port 
+    -p "8080:80" \                        # expose the port
     cirocosta/gitserver-http
   ```
 
@@ -27,7 +27,7 @@ and then, just clone it somewhere else:
   ```sh
   cd /tmp
   git clone http://localhost:8080/myrepo.git
-  cd myrepo 
+  cd myrepo
   ```
 
 
@@ -38,9 +38,8 @@ Git servers work with bare repositories. This image provides the utility of init
   ```
   .
   └── initial
-      └── initial
-          └── repo1
-              └── file.txt
+      └── repo1
+          └── file.txt
   ```
 
 and then executing
@@ -49,7 +48,7 @@ and then executing
   docker run \
     -d  \                                 # deamonize
     -v `pwd`/initial:/var/lib/initial \   # mount the initial volume
-    -p "8080:80" \                        # expose the port 
+    -p "8080:80" \                        # expose the port
     cirocosta/gitserver-http              # start git server and init repositories
   ```
 
@@ -77,5 +76,3 @@ This will create a git server http service on `:80`. Now you can clone the sampl
   ```sh
   git clone http://localhost:8080/repo1.git
   ```
-
-

@@ -11,47 +11,39 @@
 #
 #   -init     turns directories under `/var/lib/initial`
 #             into bare repositories at `/var/lib/git`
-# 
+#
 
-set -o errexit
+set -e
 
-readonly GIT_PROJECT_ROOT="/var/lib/git"
+readonly GIT_PROJECT_ROOT="/home/git"
 readonly GIT_INITIAL_ROOT="/var/lib/initial"
 readonly GIT_HTTP_EXPORT_ALL="true"
 readonly GIT_USER="git"
 readonly GIT_GROUP="git"
 
-readonly FCGIPROGRAM="/usr/bin/fcgiwrap"
-readonly USERID="nginx"
 readonly SOCKUSERID="$USERID"
-readonly FCGISOCKET="/var/run/fcgiwrap.socket"
 
 main() {
   mkdir -p $GIT_PROJECT_ROOT
+
+  echo "Args: $@"
 
   # Checks if $GIT_INITIAL_ROOT has files
   if [[ $(ls -A ${GIT_INITIAL_ROOT}) ]]; then
     initialize_initial_repositories
   fi
   initialize_services
+
+  exec "$@"
 }
 
 initialize_services() {
   # Check permissions on $GIT_PROJECT_ROOT
   if [[ ! $(stat -c %A ${GIT_PROJECT_ROOT}) -eq "drwxr-xr-x" ]]; then
-    chown -R giti:git $GIT_PROJECT_ROOT
+    chown -R git:git $GIT_PROJECT_ROOT
     chmod -R 775 $GIT_PROJECT_ROOT
   fi
-
-  /usr/bin/spawn-fcgi \
-    -s $FCGISOCKET \
-    -F 4 \
-    -u $USERID \
-    -g $USERID \
-    -U $USERID \
-    -G $GIT_GROUP -- \
-    "$FCGIPROGRAM"
-  exec nginx
+  echo "Hi from the other side"
 }
 
 initialize_initial_repositories() {
@@ -82,4 +74,5 @@ init_and_commit() {
   popd >/dev/null
 }
 
+echo "Hi in the script"
 main "$@"
